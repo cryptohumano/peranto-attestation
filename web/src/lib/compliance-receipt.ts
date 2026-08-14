@@ -79,6 +79,9 @@ export function receiptToMarkdown(
       `- **Disclosed:** score=${receipt.disclosed.score ?? "—"} country=${receipt.disclosed.country ?? "—"}`
     );
   }
+  if (receipt.applicantNote) {
+    lines.push(`- **Applicant note:** ${receipt.applicantNote}`);
+  }
   if (receipt.curatorNote) {
     lines.push(`- **Curator note:** ${receipt.curatorNote}`);
   }

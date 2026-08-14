@@ -513,6 +513,14 @@ export function CuratorPage() {
                             {t("gate.hiddenClaims")}
                           </span>
                         ) : null}
+                        {a.applicantNote ? (
+                          <span
+                            className="max-w-[10rem] truncate rounded-md bg-muted px-2 py-0.5 text-muted-foreground"
+                            title={a.applicantNote}
+                          >
+                            {a.applicantNote}
+                          </span>
+                        ) : null}
                         {a.externalRef ? (
                           <span
                             className="max-w-[9rem] truncate rounded-md bg-sand/20 px-2 py-0.5 text-tide-deep"
@@ -656,6 +664,21 @@ export function CuratorPage() {
                 </div>
 
                 <div className="space-y-2">
+                  <p className="text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
+                    {t("gate.applicantNote")}
+                  </p>
+                  {selected.applicantNote ? (
+                    <p className="whitespace-pre-wrap rounded-lg border border-border bg-muted/40 px-3 py-2 text-sm">
+                      {selected.applicantNote}
+                    </p>
+                  ) : (
+                    <p className="text-[11px] text-muted-foreground">
+                      {t("gate.noApplicantNote")}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
                   <div className="flex items-center justify-between gap-2">
                     <p className="text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
                       {t("gate.externalRef")}
@@ -695,11 +718,16 @@ export function CuratorPage() {
                   </div>
                 </div>
 
-                <Input
-                  placeholder={t("common.curatorNote")}
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                />
+                <div className="space-y-2">
+                  <p className="text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
+                    {t("common.curatorNote")}
+                  </p>
+                  <Input
+                    placeholder={t("common.curatorNote")}
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                  />
+                </div>
                 <div className="flex flex-wrap gap-2">
                   <Button
                     disabled={busy || selected.status === "REVIEWED"}

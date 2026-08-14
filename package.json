@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@peranto/sdk": "file:../dids-vc-ecotesting/packages/sdk",
+    "@peranto/zk-compliance": "file:../dids-vc-ecotesting/packages/zk-compliance",
     "@prisma/client": "^6.19.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",

@@ -103,10 +103,11 @@ export async function proveComplianceGate(
     method: "peranto_proveComplianceGate",
     params: [params],
   })) as {
-    mode: "algebraic";
+    mode: "honk" | "algebraic";
     liveCredHash: string;
     resCredHash: string;
     publicSignals: unknown;
+    proof?: { proof: string; publicInputs: string[] };
     note: string;
   };
 }

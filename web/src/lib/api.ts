@@ -395,10 +395,11 @@ export async function submitZkApplication(body: {
   liveCredHash: string;
   resCredHash: string;
   publicSignals: unknown;
+  proof?: { proof: string; publicInputs: string[] };
   subjectDid?: string;
   applicantNote?: string;
-  externalRef?: string;
   bountyId?: string;
+  externalRef?: string;
 }) {
   const r = await fetch("/v1/applications", {
     method: "POST",

@@ -34,6 +34,7 @@ export const messages = {
       loading: "…",
       error: "Error",
       optionalNote: "Nota opcional (sin datos personales)",
+      applicantNote: "Nota del postulante",
       curatorNote: "Nota curador (opcional)",
       detectExt: "Re-detectar extensión",
       detectShort: "Re-detectar",
@@ -114,7 +115,7 @@ export const messages = {
       sendZk: "Enviar prueba ZK",
       claimsDesc: "Aura Share → el curador ve score o país disclosed.",
       zkDesc:
-        "Aura genera publicSignals en el vault. Requiere Liveness + Residence guardadas con salt (re-guarda desde / si faltan).",
+        "Aura ejecuta el circuito Noir (UltraHonk) en el wallet. Requiere Liveness + Residence con salt. La primera vez descarga CRS (~segundos).",
       shareLive: "Share Liveness → inbox",
       shareRes: "Share Residence → inbox",
       proveZk: "Probar ZK y enviar al curador",
@@ -124,13 +125,15 @@ export const messages = {
       openShare: "Abre Aura — confirma share (revelarás claims)…",
       openZk: "Abre Aura — aprueba prueba ZK (sin revelar claims)…",
       sentClaims: "Claims {kind} · {status} · {id}",
-      sentZk: "ZK · {status} · ok={ok} · {id}",
+      sentZk: "ZK {mode} · {status} · ok={ok} · {id}",
       connected: "Conectado {did}",
       noAura: "Aura no detectada",
       externalRefLabel: "Ref. propuesta Formstr",
       externalRefHint:
         "ID, título o link de tu propuesta en formstr.app/i/kusama-pop",
       externalRefPlaceholder: "ej. Seeds / formstr id / URL",
+      noteLabel: "Nota para el curador (opcional)",
+      noteHint: "Mensaje libre. No es la ref de Formstr; no pongas PII.",
     },
     gate: {
       eyebrow: "Curadores",
@@ -148,7 +151,7 @@ export const messages = {
       selectHint: "Selecciona una postulación para ver el perfil.",
       profileTitle: "Perfil postulante",
       zkNote:
-        "Modo ZK: no hay score/país en el perfil. Solo binding de commitments + isValid + policy root.",
+        "Modo ZK: no hay score/país. El attester verifica UltraHonk + binding on-chain (isValid + commitments + policy root).",
       hiddenClaims: "claims ocultos",
       onChainValid: "válida",
       onChainInvalid: "no anclada",
@@ -166,6 +169,8 @@ export const messages = {
       copyReceiptMd: "Copiar receipt (Markdown)",
       receiptCopied: "Receipt copiado",
       openFormstr: "Abrir Formstr PoP",
+      applicantNote: "Nota del postulante",
+      noApplicantNote: "Sin nota del postulante",
     },
     ops: {
       eyebrow: "Operador",
@@ -247,6 +252,7 @@ export const messages = {
       loading: "…",
       error: "Error",
       optionalNote: "Optional note (no personal data)",
+      applicantNote: "Applicant note",
       curatorNote: "Curator note (optional)",
       detectExt: "Re-detect extension",
       detectShort: "Re-detect",
@@ -327,7 +333,7 @@ export const messages = {
       sendZk: "Send ZK proof",
       claimsDesc: "Aura Share → curator sees disclosed score or country.",
       zkDesc:
-        "Aura builds publicSignals in the vault. Needs Liveness + Residence saved with salt (re-save from / if missing).",
+        "Aura runs the Noir circuit (UltraHonk) in the wallet. Needs Liveness + Residence with salt. First run downloads CRS (a few seconds).",
       shareLive: "Share Liveness → inbox",
       shareRes: "Share Residence → inbox",
       proveZk: "Prove ZK and send to curator",
@@ -337,13 +343,15 @@ export const messages = {
       openShare: "Open Aura — confirm share (you will disclose claims)…",
       openZk: "Open Aura — approve ZK proof (no claims revealed)…",
       sentClaims: "Claims {kind} · {status} · {id}",
-      sentZk: "ZK · {status} · ok={ok} · {id}",
+      sentZk: "ZK {mode} · {status} · ok={ok} · {id}",
       connected: "Connected {did}",
       noAura: "Aura not detected",
       externalRefLabel: "Formstr proposal ref",
       externalRefHint:
         "ID, title, or link from formstr.app/i/kusama-pop",
       externalRefPlaceholder: "e.g. Seeds / formstr id / URL",
+      noteLabel: "Note for the curator (optional)",
+      noteHint: "Free-text message. Not the Formstr ref; no PII.",
     },
     gate: {
       eyebrow: "Curators",
@@ -361,7 +369,7 @@ export const messages = {
       selectHint: "Select an application to view the profile.",
       profileTitle: "Applicant profile",
       zkNote:
-        "ZK mode: no score/country on the profile. Only commitment binding + isValid + policy root.",
+        "ZK mode: no score/country. Attester verifies UltraHonk + on-chain binding (isValid + commitments + policy root).",
       hiddenClaims: "claims hidden",
       onChainValid: "valid",
       onChainInvalid: "not anchored",
@@ -378,6 +386,8 @@ export const messages = {
       copyReceiptMd: "Copy receipt (Markdown)",
       receiptCopied: "Receipt copied",
       openFormstr: "Open Formstr PoP",
+      applicantNote: "Applicant note",
+      noApplicantNote: "No applicant note",
     },
     ops: {
       eyebrow: "Operator",

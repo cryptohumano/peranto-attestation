@@ -118,6 +118,7 @@ export function ApplyPage() {
         liveCredHash: proof.liveCredHash,
         resCredHash: proof.resCredHash,
         publicSignals: proof.publicSignals,
+        proof: proof.proof,
         subjectDid: did,
         applicantNote: note || undefined,
         externalRef: externalRef || undefined,
@@ -128,6 +129,7 @@ export function ApplyPage() {
           status: application.status,
           ok: application.ok,
           id: shortAddr(application.id, 4),
+          mode: proof.mode,
         })
       );
       await refreshMine(did);
@@ -237,11 +239,19 @@ export function ApplyPage() {
               </a>
             </p>
           </div>
-          <Input
-            placeholder={t("common.optionalNote")}
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-          />
+          <div className="space-y-1.5">
+            <label className="text-xs font-medium text-muted-foreground">
+              {t("apply.noteLabel")}
+            </label>
+            <Input
+              placeholder={t("common.optionalNote")}
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+            />
+            <p className="text-[11px] text-muted-foreground">
+              {t("apply.noteHint")}
+            </p>
+          </div>
           {mode === "claims" ? (
             <>
               <Button
@@ -298,6 +308,11 @@ export function ApplyPage() {
                     {new Date(a.createdAt).toLocaleString(locale)}
                   </span>
                 </div>
+                  {a.applicantNote ? (
+                    <p className="text-[11px] text-muted-foreground">
+                      {a.applicantNote}
+                    </p>
+                  ) : null}
                 {a.warnings?.length ? (
                   <p className="text-[11px] text-destructive">{a.warnings[0]}</p>
                 ) : null}

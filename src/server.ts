@@ -9,6 +9,7 @@ import {
   type CompliancePolicy,
   type ComplianceGateProof,
 } from "@peranto/sdk";
+import { verifyComplianceGateHonk } from "@peranto/zk-compliance";
 import type { Address, Hex } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import "dotenv/config";
@@ -816,7 +817,25 @@ app.post("/v1/curator/verify-zk", requireCurator, async (req, res) => {
     const subjectMatch =
       live.subject.toLowerCase() === residence.subject.toLowerCase();
 
+    let honkOk = false;
+    let honkError: string | null = null;
+    const packed = req.body?.proof as
+      | { proof?: string; publicInputs?: string[] }
+      | undefined;
+    if (packed?.proof && Array.isArray(packed.publicInputs)) {
+      const honk = await verifyComplianceGateHonk({
+        mode: "honk",
+        publicSignals,
+        proof: packed,
+      });
+      honkOk = honk.ok;
+      honkError = honk.error ?? null;
+    } else {
+      honkError = "missing honk proof";
+    }
+
     const ok =
+      honkOk &&
       liveValid &&
       resValid &&
       commitmentMatch &&
@@ -836,7 +855,10 @@ app.post("/v1/curator/verify-zk", requireCurator, async (req, res) => {
       allowlist: policy.allowlist,
       allowlistRoot: root,
       disclosed: null,
-      note: "ZK binding: on-chain commitments + isValid + policy root. Claim values not revealed. Groth16 unlocks remote policy proof without witness.",
+      honkOk,
+      note: honkOk
+        ? "UltraHonk verified + on-chain commitments + isValid + policy root."
+        : `Honk: ${honkError ?? "failed"}. Binding-only is not enough for payout.`,
       checkedAt: new Date().toISOString(),
     };
 
@@ -850,6 +872,8 @@ app.post("/v1/curator/verify-zk", requireCurator, async (req, res) => {
         rootMatch,
         scoreMatch,
         subjectMatch,
+        honkOk,
+        honkError,
       },
       liveStatus: serializeStatus(live),
       residenceStatus: serializeStatus(residence),
@@ -876,6 +900,7 @@ app.post("/v1/applications", async (req, res) => {
           liveCredHash: String(req.body?.liveCredHash ?? ""),
           resCredHash: String(req.body?.resCredHash ?? ""),
           publicSignals: req.body?.publicSignals,
+          proof: req.body?.proof,
           policy: req.body?.policy,
           subjectDid: req.body?.subjectDid
             ? String(req.body.subjectDid)

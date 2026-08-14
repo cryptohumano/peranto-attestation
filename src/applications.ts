@@ -15,6 +15,7 @@ import {
   type Prisma,
 } from "@prisma/client";
 import { prisma } from "./db.js";
+import { verifyComplianceGateHonk } from "@peranto/zk-compliance";
 
 export type SubmitClaimsInput = {
   mode: "claims";
@@ -30,6 +31,7 @@ export type SubmitZkInput = {
   liveCredHash: string;
   resCredHash: string;
   publicSignals: ComplianceGateProof["publicSignals"];
+  proof?: { proof: string; publicInputs: string[] };
   policy?: Partial<CompliancePolicy>;
   subjectDid?: string;
   applicantNote?: string;
@@ -183,6 +185,18 @@ export async function submitApplication(params: {
     throw new Error("liveCredHash and resCredHash required");
   }
   if (!publicSignals) throw new Error("publicSignals required");
+  if (!input.proof?.proof || !Array.isArray(input.proof.publicInputs)) {
+    throw new Error(
+      "prueba Honk requerida (Aura mode=honk). Recarga la extensión y vuelve a enviar ZK."
+    );
+  }
+
+  const honk = await verifyComplianceGateHonk({
+    mode: "honk",
+    publicSignals,
+    proof: input.proof,
+  });
+  const honkOk = honk.ok === true;
 
   const pol: CompliancePolicy = {
     minScoreBps: Number(input.policy?.minScoreBps ?? policy.minScoreBps),
@@ -210,6 +224,7 @@ export async function submitApplication(params: {
     live.subject.toLowerCase() === residence.subject.toLowerCase();
 
   const ok =
+    honkOk &&
     liveValid &&
     resValid &&
     commitmentMatch &&
@@ -235,7 +250,10 @@ export async function submitApplication(params: {
     allowlist: pol.allowlist,
     allowlistRoot: root,
     disclosed: null,
-    note: "ZK binding stored — claim values not retained",
+    honkOk,
+    note: honkOk
+      ? "UltraHonk verified off-chain — claim values not retained"
+      : `Honk verify failed: ${honk.error ?? "unknown"}`,
     checkedAt: new Date().toISOString(),
   };
 
@@ -246,6 +264,8 @@ export async function submitApplication(params: {
     policyRootMatch,
     scoreMatch,
     subjectMatch,
+    honkOk,
+    honkError: honk.error ?? null,
   };
 
   const row = await prisma.application.create({
