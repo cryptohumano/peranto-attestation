@@ -1,0 +1,74 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --font-display: "Newsreader", "Fraunces", Georgia, serif;
+  --font-sans: "Source Sans 3", system-ui, sans-serif;
+  --color-ink: #0e1a24;
+  --color-paper: #eef3f6;
+  --color-tide: #0d5c63;
+  --color-tide-deep: #083b40;
+  --color-sand: #c9a227;
+  --color-mist: #d5e4e6;
+  --color-danger: #8b3a3a;
+  --radius: 0.65rem;
+}
+
+@theme inline {
+  --font-sans: "Source Sans 3", system-ui, sans-serif;
+  --font-heading: var(--font-display);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+}
+
+:root {
+  --background: #eef3f6;
+  --foreground: #0e1a24;
+  --card: #f7fafb;
+  --card-foreground: #0e1a24;
+  --primary: #0d5c63;
+  --primary-foreground: #eef3f6;
+  --secondary: #d5e4e6;
+  --secondary-foreground: #083b40;
+  --muted: #e4eef0;
+  --muted-foreground: #3d5558;
+  --accent: #d5e4e6;
+  --accent-foreground: #083b40;
+  --destructive: #8b3a3a;
+  --border: color-mix(in srgb, #0d5c63 18%, transparent);
+  --input: color-mix(in srgb, #0d5c63 22%, transparent);
+  --ring: #0d5c63;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 10% -10%, color-mix(in srgb, #0d5c63 12%, transparent), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 0%, color-mix(in srgb, #c9a227 10%, transparent), transparent);
+    min-height: 100dvh;
+  }
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "peranto-attestation",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Attester service: Didit → Peranto Liveness / ProofOfResidence JWT-VC + Aura save",
+  "scripts": {
+    "dev": "tsx src/server.ts",
+    "dev:watch": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "did-config": "tsx src/scripts/create-did-config.ts",
+    "web:dev": "npm run dev --prefix web",
+    "web:build": "npm run build --prefix web",
+    "db:up": "docker compose up -d",
+    "db:migrate": "prisma migrate dev",
+    "db:generate": "prisma generate",
+    "db:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@peranto/sdk": "file:../dids-vc-ecotesting/packages/sdk",
+    "@prisma/client": "^6.19.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "viem": "^2.21.54"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.0",
+    "prisma": "^6.19.3",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

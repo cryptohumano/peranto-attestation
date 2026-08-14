@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: peranto-attestation-pg
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: attestation
+      POSTGRES_PASSWORD: attestation
+      POSTGRES_DB: attestation
+    ports:
+      - "5440:5432"
+    volumes:
+      - attestation_pg:/var/lib/postgresql/data
+
+volumes:
+  attestation_pg:

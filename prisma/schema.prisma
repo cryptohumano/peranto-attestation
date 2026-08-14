@@ -1,0 +1,105 @@
+// Attestation inbox — applications from public apply portal (no Didit PII)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ApplicationMode {
+  CLAIMS
+  ZK
+}
+
+enum ApplicationStatus {
+  PENDING
+  PASSED
+  FAILED
+  REVIEWED
+}
+
+/// Snapshot of on-chain protocol addresses for this network (ops / admin).
+model ProtocolDeployment {
+  id                       String   @id @default(cuid())
+  network                  String   @unique
+  deployer                 String?
+  schemaRegistry           String
+  attesterRegistry         String
+  credentialStatusRegistry String
+  complianceZkVerifier     String?
+  didRegistry              String?
+  nameRegistry             String?
+  addressesJson            Json
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+}
+
+/// Schemas we track / register (ops catalog + on-chain sync).
+model RegisteredSchema {
+  id           String    @id @default(cuid())
+  network      String
+  schemaKey    String
+  schemaId     String
+  schemaHash   String?
+  uri          String?
+  publisher    String?
+  registerTx   String?
+  onChain      Boolean   @default(false)
+  source       String    @default("tracked")
+  registeredAt DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@unique([network, schemaKey])
+  @@index([network])
+  @@index([onChain])
+}
+
+model Application {
+  id               String            @id @default(cuid())
+  bountyId         String            @default("kusama-privacy-identity")
+  subjectDid       String
+  subjectAddress   String
+  mode             ApplicationMode
+  status           ApplicationStatus @default(PENDING)
+  ok               Boolean           @default(false)
+  challenge        String?
+
+  liveCredHash     String?
+  resCredHash      String?
+  schemaKey        String?
+
+  liveValid        Boolean?
+  residenceValid   Boolean?
+  jwtValid         Boolean?
+  onChainValid     Boolean?
+  commitmentMatch  Boolean?
+  policyRootMatch  Boolean?
+
+  /// Selective disclosure only — never raw Didit docs
+  disclosedScore   String?
+  disclosedCountry String?
+  disclosedExpires String?
+
+  profileJson      Json
+  checksJson       Json?
+
+  applicantNote    String?
+  /// Formstr proposal id / title / URL — business link for curators
+  externalRef      String?
+  curatorNote      String?
+  reviewedAt       DateTime?
+  reviewedBy       String?
+
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  @@index([bountyId, createdAt])
+  @@index([subjectDid])
+  @@index([status])
+  @@index([subjectAddress])
+  @@index([externalRef])
+}
